@@ -1,12 +1,12 @@
-package com.matsvei.photosapp;
+package com.matsvei.photosapp.home;
 
-import java.io.Serial;
+import com.matsvei.photosapp.Album;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
-    @Serial
     private final static long serialVersionUID = 1L;
 
     private String username;

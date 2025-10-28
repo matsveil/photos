@@ -9,7 +9,7 @@ public class Tag implements Serializable {
     private String value;
 
     public Tag(String name, String value) {
-        if (name == null || name.isBlank() || value == null || value.isBlank()) {
+        if (name == null || name.isEmpty() || value == null || value.isEmpty()) {
             throw new IllegalArgumentException("Tag name and value cannot be empty");
         }
         this.name = name.trim().toLowerCase();

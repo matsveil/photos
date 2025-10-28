@@ -1,4 +1,6 @@
-package com.matsvei.photosapp;
+package com.matsvei.photosapp.login;
+
+import com.matsvei.photosapp.home.User;
 
 import java.io.*;
 import java.util.HashMap;
