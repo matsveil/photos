@@ -6,11 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Album implements Serializable {
-    @Serial
     private final static long serialVersionUID = 1L;
-    
+
     private String name;
     private List<Photo> photos = new ArrayList<>();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Album(String name) {
         this.name = name;
@@ -28,6 +35,6 @@ public class Album implements Serializable {
 
     public void removePhoto(Photo photo) {
         photos.remove(photo);
-        System.out.println("Photo removed successfully";
+        System.out.println("Photo removed successfully");
     }
 }
