@@ -1,16 +1,49 @@
 package com.matsvei.photosapp;
 
+import java.io.File;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.io.Serializable;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Photo {
+public class Photo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String name;
     private String filePath;
     private LocalDateTime dateTaken;
+    private List<Tag> tags;
 
     public Photo(String name, String filePath, LocalDateTime dateTaken) {
         this.name = name;
         this.filePath = filePath;
-        this.dateTaken = dateTaken;
+        this.dateTaken = getModifiedDate();
+        this.tags = new ArrayList<>();
+    }
+
+    private LocalDateTime getModifiedDate() {
+        File file = new File(filePath);
+        return LocalDateTime.ofInstant(
+                Instant.ofEpochMilli(file.lastModified()),
+                ZoneId.systemDefault()
+        );
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     @Override
