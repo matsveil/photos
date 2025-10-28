@@ -35,6 +35,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
+
+    public List<Album> getAlbums() {
+        return albums;
+    } 
+
+
     public void addAlbum(Album album) {
         if (!albums.contains(album)) {
             albums.add(album);
@@ -54,5 +60,8 @@ public class User implements Serializable {
 
         System.out.println("Successfully removed album: " + album.getName());
     }
+
+  
+
 
 }

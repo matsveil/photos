@@ -22,7 +22,13 @@ public class DataStore {
     }
 
     public static void save() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
+        java.io.File file = new java.io.File(DATA_FILE);
+        java.io.File parent = file.getParentFile();
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();
+        }
+
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
             out.writeObject(users);
         } catch (Exception e) {
             e.printStackTrace();

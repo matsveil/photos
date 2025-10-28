@@ -30,6 +30,12 @@ public class Photo implements Serializable {
                 ZoneId.systemDefault()
         );
     }
+
+    public LocalDateTime getDateTaken() {
+        return dateTaken;
+    }
+
+    
     public String getName() {
         return name;
     }
