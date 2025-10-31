@@ -1,4 +1,6 @@
-package com.matsvei.photosapp;
+package com.matsvei.photosapp.albumView;
+
+import com.matsvei.photosapp.Tag;
 
 import java.io.File;
 import java.time.Instant;

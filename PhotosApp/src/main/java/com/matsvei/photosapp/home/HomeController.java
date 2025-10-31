@@ -1,4 +1,5 @@
 package com.matsvei.photosapp.home;
+import com.matsvei.photosapp.albumView.AlbumViewController;
 import com.matsvei.photosapp.albums.Album;
 import com.matsvei.photosapp.login.DataStore;
 import javafx.event.ActionEvent;
@@ -6,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
@@ -183,7 +186,7 @@ public class HomeController {
             Parent root = loader.load();
 
             Scene scene = logoutButton.getScene();
-            javafx.stage.Stage stage = (javafx.stage.Stage) scene.getWindow();
+            Stage stage = (Stage) scene.getWindow();
 
             stage.setScene(new Scene(root)); 
             stage.show();
@@ -191,5 +194,18 @@ public class HomeController {
         } catch (IOException e) { // <-- Catch IOException specifically
             e.printStackTrace();
         }
+    }
+
+    private void navigateToAlbum(User user, javafx.event.ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/album.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+        Scene scene = new Scene(root);
+
+        stage.setScene(scene);
+
+        stage.show();
     }
 }

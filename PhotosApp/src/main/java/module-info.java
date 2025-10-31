@@ -13,4 +13,6 @@ module com.matsvei.photosapp {
     opens com.matsvei.photosapp.home to javafx.fxml;
     exports com.matsvei.photosapp.albums;
     opens com.matsvei.photosapp.albums to javafx.fxml;
+    exports com.matsvei.photosapp.albumView;
+    opens com.matsvei.photosapp.albumView to javafx.fxml;
 }

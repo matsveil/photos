@@ -6,3 +6,9 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+# User data - should not be committed
+/data/
+
+# IntelliJ workspace file (already covered by .idea/.gitignore)
+.idea/workspace.xml
