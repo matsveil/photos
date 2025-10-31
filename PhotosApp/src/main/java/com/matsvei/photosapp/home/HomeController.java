@@ -1,9 +1,7 @@
 package com.matsvei.photosapp.home;
 
-import com.matsvei.photosapp.Album;
-import com.matsvei.photosapp.login.DataStore;  
-import javafx.collections.FXCollections;  
-import javafx.collections.ObservableList;  
+import com.matsvei.photosapp.albums.Album;
+import com.matsvei.photosapp.login.DataStore;   
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +9,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;  
-import javafx.scene.control.TextInputDialog;  
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert;  
-import javafx.scene.control.Alert.AlertType;  
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.TilePane;
 
 import java.io.IOException;  
 import java.util.Optional;  
@@ -23,12 +21,13 @@ public class HomeController {
     public Button logoutButton;
     private User user;
 
+    private Album selectedAlbum;
+
+    @FXML
+    public TilePane albumTilePane;
+
     @FXML
     private Label welcomeText;
-
-
-    @FXML
-    private ListView<Album> albumListView;
 
     @FXML
     private Button createAlbumButton;
@@ -42,10 +41,6 @@ public class HomeController {
     @FXML
     private Button openAlbumButton;
 
-    // This list will automatically update the ListView in the UI
-    private ObservableList<Album> observableAlbumList;
-
-
     // This @FXML annotation is not needed for this method
     // @FXML
     // protected void onHelloButtonClick() {
@@ -55,12 +50,36 @@ public class HomeController {
     public void setUser(User user) {
         this.user = user;
         welcomeText.setText("Welcome, " + user.getUsername() + "!");
-        // Load the user's albums into the ObservableList
-        observableAlbumList = FXCollections.observableArrayList(user.getAlbums());
-        
-        // Tell the ListView to display the items from this list
-        albumListView.setItems(observableAlbumList);
+
+        refreshAlbumTiles();
     }
+
+    private void refreshAlbumTiles() {
+        albumTilePane.getChildren().clear();
+
+        for (Album album : user.albums) {
+            Button tile = new Button(album.getName());
+            tile.setPrefSize(140, 140);
+            tile.setWrapText(true);
+            tile.getStyleClass().add("album-tile");
+
+            tile.setOnAction(e -> {
+                selectedAlbum = album;
+
+                // Clear highlight from all tiles
+                albumTilePane.getChildren().forEach(node -> node.getStyleClass().remove("album-tile-selected"));
+
+                // Highlight this tile
+                tile.getStyleClass().add("album-tile-selected");
+
+                System.out.println("Selected album: " + album.getName());
+            });
+
+            albumTilePane.getChildren().add(tile);
+        }
+    }
+
+
 
 
     @FXML
@@ -84,21 +103,18 @@ public class HomeController {
             if (nameExists) {
                 showError("An album with this name already exists.");
             } else {
-                // 1. Create the new album
                 Album newAlbum = new Album(name.trim());
-                // 2. Add it to the user's list (for saving)
+
                 user.addAlbum(newAlbum);
-                // 3. Add it to the observable list (for the UI)
-                observableAlbumList.add(newAlbum);
-                // 4. Select the new album in the list
-                albumListView.getSelectionModel().select(newAlbum);
+                refreshAlbumTiles();
+
             }
         });
     }
 
     @FXML
     private void onDeleteAlbum(ActionEvent event) {
-        Album selectedAlbum = albumListView.getSelectionModel().getSelectedItem();
+
         if (selectedAlbum == null) {
             showError("Please select an album to delete.");
             return;
@@ -106,15 +122,13 @@ public class HomeController {
 
         // TODO: Show a confirmation dialog here
 
-        // 1. Remove from the user's list (for saving)
         user.removeAlbum(selectedAlbum);
-        // 2. Remove from the observable list (for the UI)
-        observableAlbumList.remove(selectedAlbum);
+        refreshAlbumTiles();
+        selectedAlbum = null;
     }
 
     @FXML
     private void onRenameAlbum(ActionEvent event) {
-        Album selectedAlbum = albumListView.getSelectionModel().getSelectedItem();
         if (selectedAlbum == null) {
             showError("Please select an album to rename.");
             return;
@@ -144,21 +158,16 @@ public class HomeController {
             if (nameExists) {
                 showError("An album with this name already exists.");
             } else {
-                // 1. Update the album object
                 selectedAlbum.setName(newName.trim());
-                
-                // 2. Refresh the list view to show the change
-                // We get the index, remove the item, and add it back
-                // This forces the ListView to re-render the item
-                int selectedIndex = albumListView.getSelectionModel().getSelectedIndex();
-                observableAlbumList.set(selectedIndex, selectedAlbum);
+                int index = user.albums.indexOf(selectedAlbum);
+                user.albums.set(index, selectedAlbum);
+                refreshAlbumTiles();
             }
         });
     }
 
     @FXML
     private void onOpenAlbum(ActionEvent event) {
-        Album selectedAlbum = albumListView.getSelectionModel().getSelectedItem();
         if (selectedAlbum == null) {
             showError("Please select an album to open.");
             return;

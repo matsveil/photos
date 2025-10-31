@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class LoginController {
     @FXML
@@ -24,6 +24,24 @@ public class LoginController {
     @FXML
     public Button signupButton;
 
+    private void navigateToHome(User user, javafx.event.ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/home.fxml"));
+        Parent root = loader.load();
+        HomeController controller = loader.getController();
+        controller.setUser(user);
+
+        javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+
+        Scene scene = new  Scene(root);
+
+        scene.getStylesheets().add(
+                getClass().getResource("/com/matsvei/photosapp/home.css").toExternalForm()
+        );
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
     public void onSignup(javafx.event.ActionEvent actionEvent) {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -31,14 +49,7 @@ public class LoginController {
         User user = new User(username, password);
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/home.fxml"));
-            Parent root = loader.load();
-            HomeController controller = loader.getController();
-            controller.setUser(user);
-
-            javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+            navigateToHome(user, actionEvent);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -51,14 +62,7 @@ public class LoginController {
         User user = DataStore.getUser(username);
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/home.fxml"));
-            Parent root = loader.load();
-            HomeController controller = loader.getController();
-            controller.setUser(user);
-
-            javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+            navigateToHome(user, actionEvent);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }

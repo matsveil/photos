@@ -1,6 +1,8 @@
 package com.matsvei.photosapp.home;
 
-import com.matsvei.photosapp.Album;
+import com.matsvei.photosapp.albums.Album;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ public class User implements Serializable {
     private String username;
     private String password;
 
-    private List<Album> albums = new ArrayList<>();
+    public ObservableList<Album> albums = FXCollections.observableArrayList();
 
     public User(String username, String password) {
         this.username = username;
@@ -36,10 +38,9 @@ public class User implements Serializable {
     }
 
 
-    public List<Album> getAlbums() {
+    public ObservableList<Album> getAlbums() {
         return albums;
-    } 
-
+    }
 
     public void addAlbum(Album album) {
         if (!albums.contains(album)) {
