@@ -19,6 +19,7 @@ public class PhotosApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
+        System.out.println(DataStore.getAllUsers());
     }
 
     public static void main(String[] args) {

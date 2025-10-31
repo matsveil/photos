@@ -35,8 +35,14 @@ public class DataStore {
         }
     }
 
-    public static User getUser(String username) {
-        return users.get(username.toLowerCase());
+    public static User getUser(String username, String password) {
+        User user = users.get(username.toLowerCase());
+
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+
+        return null; // incorrect username or password
     }
 
     public static void addUser(User user) {

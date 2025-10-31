@@ -1,19 +1,19 @@
 .album-tile {
-    -fx-background-color: #1e1e1e;
+    -fx-background-color: #C0C0C0;
     -fx-text-fill: white;
-    -fx-background-radius: 10;
+    -fx-background-radius: 12;
     -fx-font-size: 14px;
     -fx-alignment: center;
-    -fx-padding: 8;
+    -fx-padding: 4;
 }
 
 .album-tile:hover {
-    -fx-background-color: #333;
+    -fx-background-color: #B2B2B2;
 }
 
 .album-tile-selected {
-    -fx-background-color: #005fff;
+    -fx-background-color: #007FFF;
     -fx-text-fill: white;
-    -fx-background-radius: 10;
+    -fx-background-radius: 12;
 }
 

@@ -1,20 +1,19 @@
 package com.matsvei.photosapp.home;
 
 import com.matsvei.photosapp.albums.Album;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
+    @Serial
     private final static long serialVersionUID = 1L;
 
     private String username;
     private String password;
 
-    public ObservableList<Album> albums = FXCollections.observableArrayList();
+    public List<Album> albums = new  ArrayList<>();
 
     public User(String username, String password) {
         this.username = username;
@@ -38,7 +37,7 @@ public class User implements Serializable {
     }
 
 
-    public ObservableList<Album> getAlbums() {
+    public List<Album> getAlbums() {
         return albums;
     }
 
@@ -61,8 +60,4 @@ public class User implements Serializable {
 
         System.out.println("Successfully removed album: " + album.getName());
     }
-
-  
-
-
 }

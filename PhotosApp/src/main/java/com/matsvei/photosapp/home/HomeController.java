@@ -1,7 +1,6 @@
 package com.matsvei.photosapp.home;
-
 import com.matsvei.photosapp.albums.Album;
-import com.matsvei.photosapp.login.DataStore;   
+import com.matsvei.photosapp.login.DataStore;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,15 +9,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Alert;  
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.TilePane;
-
 import java.io.IOException;  
 import java.util.Optional;  
 
 public class HomeController {
     public Button logoutButton;
+
     private User user;
 
     private Album selectedAlbum;
@@ -41,12 +40,6 @@ public class HomeController {
     @FXML
     private Button openAlbumButton;
 
-    // This @FXML annotation is not needed for this method
-    // @FXML
-    // protected void onHelloButtonClick() {
-    //     welcomeText.setText("Welcome to JavaFX Application!");
-    // }
-
     public void setUser(User user) {
         this.user = user;
         welcomeText.setText("Welcome, " + user.getUsername() + "!");
@@ -59,17 +52,15 @@ public class HomeController {
 
         for (Album album : user.albums) {
             Button tile = new Button(album.getName());
-            tile.setPrefSize(140, 140);
+            tile.setPrefSize(100, 100);
             tile.setWrapText(true);
             tile.getStyleClass().add("album-tile");
 
             tile.setOnAction(e -> {
                 selectedAlbum = album;
 
-                // Clear highlight from all tiles
                 albumTilePane.getChildren().forEach(node -> node.getStyleClass().remove("album-tile-selected"));
 
-                // Highlight this tile
                 tile.getStyleClass().add("album-tile-selected");
 
                 System.out.println("Selected album: " + album.getName());
@@ -79,9 +70,6 @@ public class HomeController {
         }
     }
 
-
-
-
     @FXML
     private void onCreateAlbum(ActionEvent event) {
         TextInputDialog dialog = new TextInputDialog();
@@ -90,6 +78,7 @@ public class HomeController {
         dialog.setContentText("Enter album name:");
 
         Optional<String> result = dialog.showAndWait();
+
         result.ifPresent(name -> {
             if (name.trim().isEmpty()) {
                 showError("Album name cannot be empty.");
@@ -107,7 +96,6 @@ public class HomeController {
 
                 user.addAlbum(newAlbum);
                 refreshAlbumTiles();
-
             }
         });
     }
@@ -175,7 +163,6 @@ public class HomeController {
 
         // TODO: Implement album opening logic
         System.out.println("Opening album: " + selectedAlbum.getName());
-        // We'll implement this part later
     }
 
     // A helper method for showing errors
@@ -187,13 +174,11 @@ public class HomeController {
         alert.showAndWait();
     }
 
-
     public void onLogout(ActionEvent actionEvent) {
-        DataStore.save(); // Save all changes before logging out
-
+        DataStore.save();
         user = null;
+
         try {
-            // Updated this path to be more robust
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/login.fxml"));
             Parent root = loader.load();
 
