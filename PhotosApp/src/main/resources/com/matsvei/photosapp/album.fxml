@@ -22,7 +22,7 @@
    <center>
       <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <content>
-            <TilePane prefHeight="200.0" prefWidth="200.0" />
+            <TilePane prefHeight="306.0" prefWidth="578.0" />
          </content>
       </ScrollPane>
    </center>

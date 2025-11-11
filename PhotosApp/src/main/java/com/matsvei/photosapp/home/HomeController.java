@@ -1,6 +1,7 @@
 package com.matsvei.photosapp.home;
+import com.matsvei.photosapp.PhotosApplication;
+import com.matsvei.photosapp.albumView.Album;
 import com.matsvei.photosapp.albumView.AlbumViewController;
-import com.matsvei.photosapp.albums.Album;
 import com.matsvei.photosapp.login.DataStore;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -163,10 +164,19 @@ public class HomeController {
             showError("Please select an album to open.");
             return;
         }
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/album.fxml"));
+            Scene scene = new Scene(loader.load());
 
-        // TODO: Implement album opening logic
-        System.out.println("Opening album: " + selectedAlbum.getName());
-    }
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Failed to open album: " + e.getMessage());
+        }
+}
 
     // A helper method for showing errors
     private void showError(String message) {

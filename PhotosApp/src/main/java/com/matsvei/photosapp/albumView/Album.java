@@ -1,6 +1,4 @@
-package com.matsvei.photosapp.albums;
-
-import com.matsvei.photosapp.albumView.Photo;
+package com.matsvei.photosapp.albumView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
