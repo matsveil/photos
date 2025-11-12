@@ -1,8 +1,10 @@
 package com.matsvei.photosapp.albumView;
 
 import com.matsvei.photosapp.Tag;
+import javafx.scene.Node;
 
 import java.io.File;
+import java.io.Serial;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -10,16 +12,14 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Photo implements Serializable {
+public class Photo extends Node implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
-
-    private String name;
     private String filePath;
     private LocalDateTime dateTaken;
     private List<Tag> tags;
 
-    public Photo(String name, String filePath, LocalDateTime dateTaken) {
-        this.name = name;
+    public Photo(String filePath) {
         this.filePath = filePath;
         this.dateTaken = getModifiedDate();
         this.tags = new ArrayList<>();
@@ -37,15 +37,6 @@ public class Photo implements Serializable {
         return dateTaken;
     }
 
-    
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getFilePath() {
         return filePath;
     }
@@ -57,8 +48,7 @@ public class Photo implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Photo)) return false;
-        Photo p =  (Photo) o;
+        if (!(o instanceof Photo p)) return false;
         return filePath.equalsIgnoreCase(p.filePath);
     }
 

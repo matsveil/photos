@@ -169,6 +169,9 @@ public class HomeController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/album.fxml"));
             Scene scene = new Scene(loader.load());
 
+            AlbumViewController controller = loader.getController();
+            controller.setAlbum(selectedAlbum);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();
