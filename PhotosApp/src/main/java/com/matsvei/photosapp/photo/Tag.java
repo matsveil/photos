@@ -1,4 +1,4 @@
-package com.matsvei.photosapp;
+package com.matsvei.photosapp.photo;
 
 import java.io.Serializable;
 

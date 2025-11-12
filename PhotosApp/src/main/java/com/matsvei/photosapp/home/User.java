@@ -1,6 +1,6 @@
 package com.matsvei.photosapp.home;
 
-import com.matsvei.photosapp.albumView.Album;
+import com.matsvei.photosapp.album.Album;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;

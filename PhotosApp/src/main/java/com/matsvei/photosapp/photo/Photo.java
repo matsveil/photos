@@ -1,6 +1,5 @@
-package com.matsvei.photosapp.albumView;
+package com.matsvei.photosapp.photo;
 
-import com.matsvei.photosapp.Tag;
 import javafx.scene.Node;
 
 import java.io.File;
@@ -16,12 +15,13 @@ public class Photo extends Node implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private String filePath;
-    private LocalDateTime dateTaken;
+    private LocalDateTime date;
+    private String caption;
     private List<Tag> tags;
 
     public Photo(String filePath) {
         this.filePath = filePath;
-        this.dateTaken = getModifiedDate();
+        this.date = getModifiedDate();
         this.tags = new ArrayList<>();
     }
 
@@ -33,8 +33,11 @@ public class Photo extends Node implements Serializable {
         );
     }
 
-    public LocalDateTime getDateTaken() {
-        return dateTaken;
+    public LocalDateTime getDate() {
+        return date;
+    }
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public String getFilePath() {
@@ -43,6 +46,14 @@ public class Photo extends Node implements Serializable {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 
     @Override

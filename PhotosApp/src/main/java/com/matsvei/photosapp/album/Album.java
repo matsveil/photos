@@ -1,5 +1,8 @@
-package com.matsvei.photosapp.albumView;
+package com.matsvei.photosapp.album;
 
+import com.matsvei.photosapp.photo.Photo;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.Comparator;
 import java.util.Optional;
 
 public class Album implements Serializable {
+    @Serial
     private final static long serialVersionUID = 1L;
 
     private String name;
@@ -59,11 +63,11 @@ public class Album implements Serializable {
 
         // Find the earliest and latest photo dates
         Optional<LocalDateTime> minDate = photos.stream()
-                .map(Photo::getDateTaken)
+                .map(Photo::getDate)
                 .min(Comparator.naturalOrder());
 
         Optional<LocalDateTime> maxDate = photos.stream()
-                .map(Photo::getDateTaken)
+                .map(Photo::getDate)
                 .max(Comparator.naturalOrder());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
