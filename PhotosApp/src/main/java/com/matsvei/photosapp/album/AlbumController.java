@@ -1,11 +1,11 @@
 package com.matsvei.photosapp.album;
+import com.matsvei.photosapp.navigation.NavigationService;
 import com.matsvei.photosapp.login.DataStore;
 import com.matsvei.photosapp.photo.Photo;
-import com.matsvei.photosapp.photo.PhotoController;
+import com.matsvei.photosapp.session.AlbumSession;
+import com.matsvei.photosapp.session.PhotoSession;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -17,21 +17,19 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.stage.Stage;
 
 public class AlbumController {
     public Button backButton;
+    public Button openPhotoButton;
     private Album album;
     private Photo selectedPhoto;
 
-    public void setAlbum(Album album) {
-        this.album = album;
-        this.albumName.setText(album.getName());
-        displayPhotos(); // optional: show existing photos immediately
-    }
-
     @FXML
-    private Button addPhotoButton;
+    public void initialize() {
+        this.album = AlbumSession.get();
+        this.albumName.setText(album.getName());
+        displayPhotos();
+    }
 
     @FXML
     private Label albumName;
@@ -66,19 +64,18 @@ public class AlbumController {
             File file = new File(photo.getFilePath());
             Image image = new Image(file.toURI().toString(), 120, 120, true, true);
             ImageView imageView = new ImageView(image);
+
             imageView.setFitWidth(120);
             imageView.setFitHeight(120);
             imageView.setPreserveRatio(false);
 
-            // Rounded corners by masking via a clip
             Rectangle clip = new Rectangle(120, 120);
             clip.setArcWidth(20);
             clip.setArcHeight(20);
             imageView.setClip(clip);
 
-            // Wrap the ImageView in a StackPane so we can apply styles on it
             StackPane container = new StackPane(imageView);
-            container.setStyle("-fx-background-radius: 20; -fx-padding: 3;");
+            container.setStyle("-fx-background-radius: 20; -fx-padding: 0;");
 
             container.setOnMouseClicked(event -> {
                 selectedPhoto = photo;
@@ -91,34 +88,30 @@ public class AlbumController {
 
     private void highlightSelected(StackPane selectedContainer) {
         for (Node node : photoTilePane.getChildren()) {
-            node.setStyle("-fx-background-radius: 20; -fx-padding: 3;");
+            node.setStyle("");
         }
-
         selectedContainer.setStyle(
-                "-fx-background-color: #00aaff33; -fx-background-radius: 20; -fx-padding: 3;"
+                "-fx-border-color: #1E90FF; " +
+                        "-fx-border-width: 2; " +
+                        "-fx-border-radius: 12; " +
+                        "-fx-padding: 0;"
         );
-    }
-
-    private void highlightSelected(ImageView selectedView) {
-        for (Node node : photoTilePane.getChildren()) {
-            node.setStyle(""); // clear previous highlight
-        }
-        selectedView.setStyle("-fx-effect: dropshadow(gaussian, #00aaff, 10, 0.5, 0, 0);");
     }
 
     @FXML
     private void onOpenPhoto(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/photo.fxml"));
-            Scene scene = new Scene(loader.load());
+            PhotoSession.set(selectedPhoto);
+            NavigationService.navigate("/com/matsvei/photosapp/photo.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-            PhotoController controller = loader.getController();
-            controller.setPhoto(selectedPhoto);
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
+    @FXML
+    private void onBack(ActionEvent event) {
+        try {
+            NavigationService.navigate("/com/matsvei/photosapp/home.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }

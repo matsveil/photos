@@ -1,5 +1,6 @@
 package com.matsvei.photosapp.photo;
 
+import com.matsvei.photosapp.album.Album;
 import javafx.scene.Node;
 
 import java.io.File;
@@ -67,4 +68,5 @@ public class Photo extends Node implements Serializable {
     public int hashCode() {
         return filePath.toLowerCase().hashCode();
     }
+
 }

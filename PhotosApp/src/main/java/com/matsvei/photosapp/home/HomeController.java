@@ -1,14 +1,17 @@
 package com.matsvei.photosapp.home;
+import com.matsvei.photosapp.navigation.NavigationService;
 import com.matsvei.photosapp.album.Album;
 import com.matsvei.photosapp.album.AlbumController;
 import com.matsvei.photosapp.login.DataStore;
+import com.matsvei.photosapp.session.AlbumSession;
+import com.matsvei.photosapp.session.UserSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
@@ -43,10 +46,16 @@ public class HomeController {
     @FXML
     private Button openAlbumButton;
 
-    public void setUser(User user) {
-        this.user = user;
-        welcomeText.setText("Welcome, " + user.getUsername() + "!");
+    @FXML
+    public void initialize() {
+        user = UserSession.get();
 
+        if (user == null) {
+            System.out.println("NO USER IN SESSION — this means login didn’t set it.");
+            return;
+        }
+
+        welcomeText.setText("Welcome, " + user.getUsername() + "!");
         refreshAlbumTiles();
     }
 
@@ -164,22 +173,13 @@ public class HomeController {
             showError("Please select an album to open.");
             return;
         }
-        
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/album.fxml"));
-            Scene scene = new Scene(loader.load());
-
-            AlbumController controller = loader.getController();
-            controller.setAlbum(selectedAlbum);
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+            AlbumSession.set(selectedAlbum);
+            NavigationService.navigate("/com/matsvei/photosapp/album.fxml");
         } catch (IOException e) {
-            e.printStackTrace();
-            showError("Failed to open album: " + e.getMessage());
+            throw new RuntimeException(e);
         }
-}
+    }
 
     // A helper method for showing errors
     private void showError(String message) {

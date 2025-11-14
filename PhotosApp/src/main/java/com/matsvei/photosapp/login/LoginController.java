@@ -1,11 +1,10 @@
 package com.matsvei.photosapp.login;
 
+import com.matsvei.photosapp.navigation.NavigationService;
 import com.matsvei.photosapp.home.HomeController;
 import com.matsvei.photosapp.home.User;
+import com.matsvei.photosapp.session.UserSession;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
@@ -26,21 +25,8 @@ public class LoginController {
     public Button signupButton;
 
     private void navigateToHome(User user, javafx.event.ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/matsvei/photosapp/home.fxml"));
-        Parent root = loader.load();
-        HomeController controller = loader.getController();
-        controller.setUser(user);
-
-        javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
-
-        Scene scene = new  Scene(root);
-
-        scene.getStylesheets().add(
-                getClass().getResource("/com/matsvei/photosapp/home.css").toExternalForm()
-        );
-        stage.setScene(scene);
-
-        stage.show();
+        UserSession.set(user);
+        NavigationService.navigate("/com/matsvei/photosapp/home.fxml");
     }
 
     public void onSignup(javafx.event.ActionEvent actionEvent) {
