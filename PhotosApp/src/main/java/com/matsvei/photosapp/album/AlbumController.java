@@ -4,9 +4,12 @@ import com.matsvei.photosapp.login.DataStore;
 import com.matsvei.photosapp.photo.Photo;
 import com.matsvei.photosapp.session.AlbumSession;
 import com.matsvei.photosapp.session.PhotoSession;
+import com.matsvei.photosapp.session.UserSession;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +19,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 import javafx.fxml.FXML;
 
 public class AlbumController {
@@ -115,5 +120,59 @@ public class AlbumController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void onCopy(ActionEvent event) {
+        handleCopyOrMove(false);
+    }
+
+    @FXML
+    public void onMove(ActionEvent event) {
+        handleCopyOrMove(true);
+    }
+
+    private void handleCopyOrMove(boolean move) {
+        if (selectedPhoto == null) {
+            showAlert("No photo selected", "Please select a photo first.");
+            return;
+        }
+
+        List<Album> targetAlbums = UserSession.get().albums.stream()
+                .filter(a -> a != album)
+                .toList();
+
+        if (targetAlbums.isEmpty()) {
+            showAlert("No other albums", "There are no other albums to " + (move ? "move" : "copy") + " to.");
+            return;
+        }
+
+        ChoiceDialog<Album> dialog = new ChoiceDialog<>(targetAlbums.getFirst(), targetAlbums);
+        dialog.setTitle(move ? "Move Photo" : "Copy Photo");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Choose target album:");
+
+        Optional<Album> result = dialog.showAndWait();
+        result.ifPresent(targetAlbum -> {
+            if (move) {
+                album.movePhoto(selectedPhoto, album, targetAlbum);
+            } else {
+                album.copyPhoto(selectedPhoto, targetAlbum);
+            }
+            DataStore.save();
+            if (move) {
+                // refresh the current album view after moving
+                displayPhotos();
+                selectedPhoto = null;
+            }
+        });
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

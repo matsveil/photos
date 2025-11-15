@@ -83,6 +83,19 @@ public class Album implements Serializable {
         return "N/A";
     }
 
+    public void copyPhoto(Photo photo, Album album) {
+        if (!album.getPhotos().contains(photo)) {
+            album.addPhoto(photo);
+        }
+    }
+
+    public void movePhoto(Photo photo, Album fromAlbum, Album toAlbum) {
+        if (!toAlbum.getPhotos().contains(photo)) {
+            toAlbum.addPhoto(photo);
+            fromAlbum.removePhoto(photo);
+        }
+    }
+
     @Override
     public String toString() {
         // This will be displayed in the ListView
